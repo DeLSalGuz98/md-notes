@@ -57,16 +57,18 @@ Para empezar debemos crear el archivo `Dockerfile`
 
 El docker compose sirve para ejecutar multiples servicios con un unico comando atravez del archivo `docker-compose.yml`.
 
-```yml
-version:"3" //especifica la version del docker-compose  
+Esto puede entenderse como una alternativa al `docker run`
 
-services: //permite crear contenedores y conectarlos entre si
-  web: //indica el nombre del servicio (puede ser cualquiera)
-    build: . //especifica la ruta del Dockerdile
-    image: 'hola-docker:1.3' //indicamos el nombre de la imagen
-    ports: //expone los puertos del contenedor a la pc
+```yml
+version:"3" #especifica la version del docker-compose  
+
+services: #permite crear contenedores y conectarlos entre si
+  web: #indica el nombre del servicio (puede ser cualquiera)
+    build: . #especifica la ruta del Dockerdile
+    image: 'hola-docker:1.3' #indicamos el nombre de la imagen
+    ports: #expone los puertos del contenedor a la pc
       - "5000:5000"
-    enviorment: //configura las variables entorno
+    enviorment: #configura las variables entorno
       MSG: 'saludo a todos' 
 ```
 Para levantar nuestro servicio podemos usar el comando `docker-compose up` en la ruta donde se encuentra nuestro `docker-compose.yml`
@@ -74,3 +76,53 @@ Para levantar nuestro servicio podemos usar el comando `docker-compose up` en la
 si lo que queremos es que se ejecute en **segundo plano**, le pasamos lo siguiente `docker-compose up -d`
 
 para detener el servicio podemos usar `docker-compose down`
+
+si se han realizado cambios en nuestro **Dockerfile** podemos usar el comando `docker-compose up -d --build` para que vuelva a construir la imagen antes que se ejecuten los servicios.
+
+### Agregamos un nuevo servicio
+```yml
+version:"3"
+
+services:
+  web:
+    ...
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+```
+>Nota: dcoker-comopose suele configurarnos una red por defecto para que se comuniquen los servicios de neustros contenedores
+
+### Variables de entorno
+Para poder pasarle variables de entorno a nuestro archivo `.yml`, primero creamos el archivo `.env`, dentro digitamos las variables y para pasarselo a nuestro `docker-compose` usamola siguiente convencion `${NOMBRE_VARIABLE}` 
+
+```yml
+    ...
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASS}
+
+```
+### Volumenes
+```yml
+version:"3"  
+
+services: 
+  web: 
+    ...
+    volumes:
+      - .:/app   #/dirPcLocal:/dirContenedor 
+  db:
+    ...
+    volumes:
+      - data:/var/lib/postgresql/data 
+
+volumes: #creamos un volumen de memoria en nuestro contenedor 
+  data:
+    driver: local
+  
+```
