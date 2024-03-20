@@ -31,6 +31,7 @@ y si queremos volver a ejecutarlo pero en un puerto diferente, lo hacemos de la 
 |**docker** _run -p puertoPC:puertoContenedor_|permite que enlacemos un puerto de nuestro pc con el puerto de nuestro contenedor|
 |**docker** _exec nombreProceso comando_|nos permite hacer ejecucion de comandos (comandos linux por o general) dentro de nuestro contenedor|
 |**docker** _exec **-it** nombreProceso bash_|mantiene una sesion interactiva con la terminal y el contenedor de docker|
+|**docker** _run **-dit** **-p 80:80 --name nombreProceso** nombreImagen_|ejecutamos la imagen en el puerto 80, en segundo plano y manteniendo una sesion interactiva|
 |**docker** _run **-v rutaDirPc:rutaDirDocker** nombreImagen_| esto enlaza un volumen de memoria de docker con un volumen de memoria de nuestra maquina local|
 |**docker** _network ls_| lista las redes que tengo intalado en mi maquina local|
 
